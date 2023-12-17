@@ -1,31 +1,26 @@
-#!/usr/bin/env bash
+#!/bin bash
 
-REPOSITORY=/home/ubuntu/app
+REPOSITORY=/home/runner/work/FarmPam_Backend/FarmPam_Backend
+cd $REPOSITORY
 
-echo "> 현재 구동 중인 애플리케이션 pid 확인"
+# jar 파일 찾기
+APP_NAME=cicdproject
+JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep 'SNAPSHOT.jar')
+JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
-CURRENT_PID=$(pgrep -fl action | grep java | awk '{print $1}')
+# jar 파일 실행
+CURRENT_PID=$(pgrep -f $APP_NAME)
 
-echo "현재 구동 중인 애플리케이션 pid: $CURRENT_PID"
-
-if [ -z "$CURRENT_PID" ]; then
-  echo "현재 구동 중인 애플리케이션이 없으므로 종료하지 않습니다."
+# 해당 프로세스가 실행 되었을 시 종료
+if [ -z $CURRENT_PID ]
+then
+  echo "> 종료할것 없음."
 else
-  echo "> kill -15 $CURRENT_PID"
+  echo "> kill -9 $CURRENT_PID"
   kill -15 $CURRENT_PID
   sleep 5
 fi
 
-echo "> 새 애플리케이션 배포"
-
-JAR_NAME=$(ls -tr $REPOSITORY/*.jar | tail -n 1)
-
-echo "> JAR NAME: $JAR_NAME"
-
-echo "> $JAR_NAME 에 실행권한 추가"
-
-chmod +x $JAR_NAME
-
-echo "> $JAR_NAME 실행"
-
-nohup java -jar $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
+# 새 버전의 프로세스를 실행
+echo "> $JAR_PATH 배포"
+nohup java -jar $JAR_PATH > /dev/null 2> /dev/null < /dev/null &
