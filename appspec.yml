@@ -1,11 +1,13 @@
 version: 0.0
-os: ubuntu
+os: linux
 
 files:
   # CodeDeploy agent가 다운로드 받은 코드에서 어느 경로를 다운 받을지 결정(/ -> 전체 파일을 받는다.)
   - source: /
     # EC2 서버에서 어느 경로에 해당 코드를 저장할지 결정
     destination: /home/ubuntu
+    overwrite: yes
+file_exists_behavior: OVERWRITE
 
 permissions:
   - object: /home/ubuntu
@@ -15,6 +17,6 @@ permissions:
 # 수명 주기
 hooks:
   AfterInstall:
-    - location: scripts/deploy.sh
+    - location: deploy.sh
       timeout: 180
       runas: ubuntu
