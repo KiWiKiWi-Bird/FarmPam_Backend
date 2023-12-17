@@ -63,10 +63,9 @@ public class BidService {
     public List<BidVO> getMyBidPrice(String key, String userName){
         List<BidVO> allBidList = getValuesListAll(key);
         List<BidVO> myBidList = new ArrayList<>();
-        for(int i = 0; allBidList.size() > i; i++){
-            BidVO bidVO = allBidList.get(i);
+        for (BidVO bidVO : allBidList) {
             String BidListName = bidVO.getUserName();
-            if(BidListName.equals(userName)){
+            if (BidListName.equals(userName)) {
                 myBidList.add(bidVO);
             }
         }
