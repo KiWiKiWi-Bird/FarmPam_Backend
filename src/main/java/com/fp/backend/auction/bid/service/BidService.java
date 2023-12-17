@@ -55,7 +55,6 @@ public class BidService {
 
         long current = Long.parseLong(bid.getBidPrice());
         if (current < bidPrice && farmMoney >= bidPrice){
-            System.out.println(bidPrice);
             list.leftPush(key, data);
 
         }
@@ -63,15 +62,10 @@ public class BidService {
     @Transactional(readOnly = true)
     public List<BidVO> getMyBidPrice(String key, String userName){
         List<BidVO> allBidList = getValuesListAll(key);
-        System.out.println("여기 존나존나 여기: " + allBidList.get(0));
         List<BidVO> myBidList = new ArrayList<>();
-        for(int i = 0; allBidList.size() > i; i++){
-            BidVO bidVO = allBidList.get(i);
-            System.out.println("bid bid존나게 존나 여기: "+ bidVO.getContent());
+        for (BidVO bidVO : allBidList) {
             String BidListName = bidVO.getUserName();
-            System.out.println("리스트 네임BidListName = " + BidListName);
-            System.out.println("존나 입풋 네임"+userName);
-            if(BidListName.equals(userName)){
+            if (BidListName.equals(userName)) {
                 myBidList.add(bidVO);
             }
         }
@@ -115,7 +109,7 @@ public class BidService {
         Bid currentBid = new Bid();
         currentBid.setBidId(key);
         currentBid.setBidPrice(bid.getBidPrice());
-        System.out.println("bid.getBidPrice() = " + bid.getBidPrice());
+
         return currentBid;
     }
     public List<Bid> currentBid(){
