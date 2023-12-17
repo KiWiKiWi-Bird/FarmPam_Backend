@@ -38,10 +38,6 @@ jobs:
         with:
           arguments: build
 
-      # jar 파일 생성
-      - name: Make jar File
-        run: gradle bootJar
-
       # 압축 파일 생성
       - name: Make Zip File
         run: zip -qq -r ./backend.zip .

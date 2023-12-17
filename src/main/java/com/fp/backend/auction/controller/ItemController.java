@@ -51,7 +51,6 @@ public class ItemController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상품 등록 중 에러가 발생했습니다.");
         }
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -100,7 +99,6 @@ public class ItemController {
 
         return new ResponseEntity<>(itemList, HttpStatus.OK);
     }
-
 
     // 경매 삭제
     @DeleteMapping("/item/delete/{itemId}")
