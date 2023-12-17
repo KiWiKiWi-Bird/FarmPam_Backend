@@ -204,9 +204,9 @@ public class UserService {
 
 //        String username = redisService.findUsernameByAccessToken(accessToken);
 
-        Users user = userRepository.findByPhoneNumber(dto.getPhoneNumber());
+      Optional<Users> user = userRepository.findByUsername(dto.getUsername());
 
-        String username = user.getUsername();
+        String username = user.get().getUsername();
 
         System.out.println("유저네임 확인 : " + username);
 
@@ -215,20 +215,22 @@ public class UserService {
 
 //        Optional<Users> user = userRepository.findByUsername(username);
 
+        Users user2 = userRepository.findByPhoneNumber(dto.getPhoneNumber());
+
 
         //휴대폰 인증이 되어있지 않다면
-        if (!user.isPhoneCheck()) {
-
-            return new ResponseEntity<>("휴대폰 인증을 해주세요.", HttpStatus.BAD_REQUEST);
-
-        }
+//        if (!user2.isPhoneCheck()) {
+//
+//            return new ResponseEntity<>("휴대폰 인증을 해주세요.", HttpStatus.BAD_REQUEST);
+//
+//        }
 
             Users updateUser = Users.builder()
-                    .username(user.getUsername())
-                    .password(user.getPassword())
+                    .username(user.get().getUsername())
+                    .password(user.get().getPassword())
                     .realName(dto.getRealName())
-                  .nickname(user.getNickname())
-//                  .phoneNumber(dto.getPhoneNumber())
+                  .nickname(user.get().getNickname())
+                  .phoneNumber(dto.getPhoneNumber())
                     .age(dto.getAge())
                     .mailCode(dto.getMailCode())
                     .streetAddress(dto.getStreetAddress())
