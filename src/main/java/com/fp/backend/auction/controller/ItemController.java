@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +51,6 @@ public class ItemController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("상품 등록 중 에러가 발생했습니다.");
         }
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -67,6 +68,25 @@ public class ItemController {
         return new ResponseEntity<>(itemList, HttpStatus.OK);
     }
 
+    //경매 가져오기(관리자 페이지)
+    @GetMapping("/item/allList")
+    public ResponseEntity<?> getAllItemList(
+            @RequestParam int page,
+            @RequestParam String sortType
+    ) {
+
+//        Map<String, Object> response = new HashMap<>();
+        Page<Item> items = itemService.getAllItems(page, sortType);
+
+//     int pageNum =  items.getTotalPages();
+//
+//        response.put("items", items); // Page<Item> 추가
+//        response.put("pageNum", pageNum); // int pageNum 추가
+
+        return new ResponseEntity<>(items, HttpStatus.OK);
+    }
+
+
     // 네브바 검색
     @GetMapping("/nav/item/list")
     public ResponseEntity<List<ItemFormDto>> getItemList(@RequestParam int page,
@@ -79,7 +99,6 @@ public class ItemController {
 
         return new ResponseEntity<>(itemList, HttpStatus.OK);
     }
-
 
     // 경매 삭제
     @DeleteMapping("/item/delete/{itemId}")

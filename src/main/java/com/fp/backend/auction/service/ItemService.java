@@ -113,12 +113,17 @@ public class ItemService {
             if (sortType.equals("time")) {
                 PageRequest pageable = PageRequest.of(page, 7, Sort.by("time").ascending());
                 itemList = this.itemRepository.findByIsSoldoutFalseOrderByTime(pageable);
-            } /*else if (sortType.equals("auctioning")) {
+            } else if (sortType.equals("buyer")) {
                 PageRequest pageable = PageRequest.of(page, 7);
+                itemList = this.itemRepository.findByBuyerIsNotNull(pageable);
 
-            } */else if (sortType.equals("completed")) {
+            } else if (sortType.equals("completed")) {
                 PageRequest pageable = PageRequest.of(page, 7);
                 itemList = this.itemRepository.findCompletedItemsOrderedByIdAsc(pageable);
+
+            } else if (sortType.equals("home")) {
+                PageRequest pageable = PageRequest.of(page, 7);
+                itemList = this.itemRepository.findByIsSoldoutFalseOrderByIdAsc(pageable);
 
             } else {
                 PageRequest pageable = PageRequest.of(page, 7, Sort.by("id").descending());
@@ -144,18 +149,34 @@ public class ItemService {
                 if (itemFormDto.getIsSoldout()) {
                     itemFormDtoList.add(itemFormDto);
                 }
+            } else if (sortType.equals("buyer")) {
+                if (itemFormDto.getIsSoldout()) {
+                    itemFormDtoList.add(itemFormDto);
+                }
             } else {
                 if (!itemFormDto.getIsSoldout()) {
                     itemFormDtoList.add(itemFormDto);
                 }
             }
 
-            System.out.println("시간: " + itemFormDto.getTime());
-            System.out.println("판매여부: " + itemFormDto.getIsSoldout());
-
-
         }
         return itemFormDtoList;
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<Item> getAllItems(int page, String sortType) {
+
+        PageRequest pageable = PageRequest.of(page, 9);
+
+//        return itemRepository.findAll(pageable);
+
+        if (sortType.equals("completed")) {
+            return itemRepository.findAllByIsSoldoutTrue(pageable);
+        }
+        else {
+            return itemRepository.findAllByIsSoldoutFalse(pageable);
+        }
     }
 
     //네브바 검색

@@ -1,7 +1,6 @@
-#!/bin bash
+#!/usr/bin/env bash
 
-REPOSITORY=/home/runner/work/FarmPam_Backend/FarmPam_Backend
-cd $REPOSITORY
+REPOSITORY=/home/ubuntu/build/libs
 
 # jar 파일 찾기
 APP_NAME=cicdproject
